@@ -16,16 +16,29 @@ app.get("/", (req, res) => {
 
 app.post("/api/users", (req, res) => {
   const { username } = req.body;
-  const userId = Object.keys(users).length + 1;
-
+  
   // Check if the username already exists
   const existingUser = Object.values(users).find(
     (user) => user.username === username
   );
+
   if (existingUser) {
     return res.json(existingUser);
   }
+  let userId = generateId();
 
+  function generateId() {
+    const characters = "0123456789abcdef";
+    let id = "";
+    do {
+      id = "";
+      for (let i = 0; i < 24; i++) {
+        const randomIndex = Math.floor(Math.random() * characters.length);
+        id += characters[randomIndex];
+      }
+    } while (users.hasOwnProperty(id));
+    return id;
+  }
   const newUser = { username: username, _id: userId };
   users[userId] = newUser;
 
