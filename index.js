@@ -74,10 +74,34 @@ app.post("/api/users/:_id/exercises", (req, res) => {
 app.get("/api/users/:_id/logs", (req, res) => {
   const _id = req.params._id;
   let user = users[_id];
-  const userLog = userLogs[_id];
+  let userLog = userLogs[_id];
+  if(req.query.from){
+    console.log(req.query.from)
+  }
+  if(req.query.to){
+    console.log(req.query.to)
+  }
+  if(req.query.limit){
+    console.log(req.query.limit)
+  }
+
+  if (userLog && req.query.from && req.query.to) {
+    const fromDate = new Date(req.query.from);
+    const toDate = new Date(req.query.to);
+    userLog = userLog.filter((log) => {
+      const logDate = new Date(log.date);
+      return logDate >= fromDate && logDate <= toDate;
+    });
+  }
+
+  if (userLog && req.query.limit) {
+    const limit = parseInt(req.query.limit);
+    userLog = userLog.slice(0, limit);
+  }
+
   res.json({
     ...user,
-    count: userLog ? userLog.length:0,//todo
+    count: userLog ? userLog.length : 0,
     log: userLog,
   });
 });
