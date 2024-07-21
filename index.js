@@ -4,6 +4,7 @@ const cors = require("cors");
 require("dotenv").config();
 
 const users = {};
+const userLogs = {};
 
 app.use(cors());
 app.use(express.static("public"));
@@ -52,18 +53,32 @@ app.get("/api/users", (req, res) => {
 app.post("/api/users/:_id/exercises", (req, res) => {
   let date = req.body.date;
   date = date ? new Date(date).toDateString() : new Date().toDateString();
-  let user = users[req.params._id];
-  (user.date = date), (user.duration = parseInt(req.body.duration));
-  user.description = req.body.description;
-  res.json(user);
+  const _id = req.params._id;
+  let log = users[_id];
+  log.date = date;
+  log.duration = parseInt(req.body.duration);
+  log.description = req.body.description;
+
+  if (!userLogs[_id]) {
+    userLogs[_id] = [];
+  }
+
+  userLogs[_id].push({
+    description: log.description,
+    duration: log.duration,
+    date: log.date,
+  });
+  res.json(log);
 });
 
 app.get("/api/users/:_id/logs", (req, res) => {
-  let user = users[req.params._id];
+  const _id = req.params._id;
+  let user = users[_id];
+  const userLog = userLogs[_id];
   res.json({
     ...user,
-    count: 1,//todo
-    log: [{ description: "sdfsd", duration: 123, date: "Sun Jul 21 2024" }],//todo
+    count: userLog ? userLog.length:0,//todo
+    log: userLog,
   });
 });
 
