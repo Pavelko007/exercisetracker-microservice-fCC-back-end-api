@@ -52,13 +52,11 @@ app.get("/api/users", (req, res) => {
 app.post("/api/users/:_id/exercises", (req, res) => {
   let date = req.body.date;
   date = date ? new Date(date).toDateString() : new Date().toDateString();
-  res.json({
-    _id: req.params._id,
-    username: users[req.params._id].username,
-    date: date,
-    duration: parseInt(req.body.duration),
-    description: req.body.description,
-  });
+  let user = users[req.params._id];
+  user.date = date,
+  user.duration = parseInt(req.body.duration)
+  user.description = req.body.description
+  res.json(user);
 });
 
 const listener = app.listen(process.env.PORT || 3000, () => {
