@@ -16,7 +16,7 @@ app.get("/", (req, res) => {
 
 app.post("/api/users", (req, res) => {
   const { username } = req.body;
-  
+
   // Check if the username already exists
   const existingUser = Object.values(users).find(
     (user) => user.username === username
@@ -53,10 +53,18 @@ app.post("/api/users/:_id/exercises", (req, res) => {
   let date = req.body.date;
   date = date ? new Date(date).toDateString() : new Date().toDateString();
   let user = users[req.params._id];
-  user.date = date,
-  user.duration = parseInt(req.body.duration)
-  user.description = req.body.description
+  (user.date = date), (user.duration = parseInt(req.body.duration));
+  user.description = req.body.description;
   res.json(user);
+});
+
+app.get("/api/users/:_id/logs", (req, res) => {
+  let user = users[req.params._id];
+  res.json({
+    ...user,
+    count: 1,//todo
+    log: [{ description: "sdfsd", duration: 123, date: "Sun Jul 21 2024" }],//todo
+  });
 });
 
 const listener = app.listen(process.env.PORT || 3000, () => {
