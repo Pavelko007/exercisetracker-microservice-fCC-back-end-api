@@ -10,12 +10,19 @@ app.get("/", (req, res) => {
 });
 
 app.post("/api/users", (req, res) => {
+  //todo
   res.json({ username: "Pavlo", _id: "669d2288f3f0350013ad4330" });
 });
 
 app.get("/api/users", (req, res) => {
+  //todo
   res.json([{ username: "Pavlo", _id: "669d2288f3f0350013ad4330" }]);
 });
+
+app.post("/api/users/:_id/exercises", (req, res)=>{
+  //todo
+  res.json({});
+})
 
 const listener = app.listen(process.env.PORT || 3000, () => {
   console.log("Your app is listening on port " + listener.address().port);
