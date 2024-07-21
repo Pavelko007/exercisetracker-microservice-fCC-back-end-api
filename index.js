@@ -54,9 +54,9 @@ app.post("/api/users/:_id/exercises", (req, res) => {
   date = date ? new Date(date).toDateString() : new Date().toDateString();
   res.json({
     _id: req.params._id,
-    username: users[req.params._id].username, //todo
+    username: users[req.params._id].username,
     date: date,
-    duration: req.body.duration,
+    duration: parseInt(req.body.duration),
     description: req.body.description,
   });
 });
